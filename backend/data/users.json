@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "username": "piyush",
+    "password": "1234",
+    "unlockedLevel": 4
+  },
+  {
+    "id": 2,
+    "username": "mahak",
+    "password": "9999",
+    "unlockedLevel": 2
+  },
+  {
+    "id": 3,
+    "username": "khushi",
+    "password": "0000",
+    "unlockedLevel": 1
+  },
+  {
+    "id": 4,
+    "username": "prabhnoor",
+    "password": "1111",
+    "unlockedLevel": 1
+  }
+]
