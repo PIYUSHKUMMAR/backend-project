@@ -1,39 +1,193 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Level Devil Clone</title>
+<meta charset="UTF-8">
+<title>Level Devil Game</title>
+
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+<!-- GAME CANVAS -->
+<canvas id="gameCanvas"></canvas>
+
+
 <!-- LOGIN UI -->
-<div id="loginUI" style="
-display:none;
-position:absolute;
-top:120px;
-left:300px;
-background:white;
-padding:20px;
-border-radius:8px;
-box-shadow:0 0 10px rgba(0,0,0,0.5);
-">
+<div id="loginUI">
 
 <h3>Login</h3>
 
-<input id="username" placeholder="Username"><br><br>
-
-<input id="password" type="password" placeholder="Password"><br><br>
+<input id="username" placeholder="Username">
+<input id="password" type="password" placeholder="Password">
 
 <button onclick="login()">Login</button>
-<button onclick="closeLogin()">Cancel</button>
+<button onclick="showSignup()">Signup</button>
 
 </div>
 
-<canvas id="gameCanvas"></canvas>
 
+<!-- SIGNUP UI -->
+<div id="signupUI">
+
+<h3>Signup</h3>
+
+<input id="signupUsername" placeholder="Username">
+<input id="signupPassword" type="password" placeholder="Password">
+
+<button onclick="signup()">Create Account</button>
+<button onclick="showLogin()">Back</button>
+
+</div>
+
+
+<!-- FILE UPLOAD UI -->
+<div id="uploadUI">
+
+<h3>Upload Profile Picture</h3>
+
+<input type="file" id="imageFile">
+
+<button onclick="uploadImage()">Upload Image</button>
+
+</div>
+
+
+<!-- SOCKET.IO -->
+<script src="/socket.io/socket.io.js"></script>
+
+<!-- GAME FILES -->
 <script src="levels.js"></script>
 <script src="game.js"></script>
+
+
+<script>
+
+// ----------------------------
+// UI CONTROL
+// ----------------------------
+function showLogin(){
+    document.getElementById("loginUI").style.display = "block";
+    document.getElementById("signupUI").style.display = "none";
+}
+
+function showSignup(){
+    document.getElementById("signupUI").style.display = "block";
+    document.getElementById("loginUI").style.display = "none";
+}
+
+
+// ----------------------------
+// LOGIN FUNCTION
+// ----------------------------
+window.login = function(){
+
+let username = document.getElementById("username").value;
+let password = document.getElementById("password").value;
+
+fetch("/api/login",{
+method:"POST",
+credentials:"include",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({username,password})
+})
+.then(res=>res.json())
+.then(data=>{
+
+if(data.error){
+    alert(data.error);
+}else{
+
+    alert("Login successful");
+
+    localStorage.setItem("playerId", data._id);
+    localStorage.setItem("unlockedLevel", data.unlockedLevel);
+    localStorage.setItem("token", data.token);
+
+    window.location.href = "/dashboard";
+}
+
+});
+
+};
+
+
+// ----------------------------
+// SIGNUP FUNCTION
+// ----------------------------
+function signup(){
+
+let username = document.getElementById("signupUsername").value;
+let password = document.getElementById("signupPassword").value;
+
+fetch("/api/signup",{
+method:"POST",
+credentials:"include",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({username,password})
+})
+.then(res=>res.json())
+.then(data=>{
+
+if(data.error){
+    alert(data.error);
+}else{
+    alert("Account created successfully");
+    showLogin();
+}
+
+});
+
+}
+
+
+// ----------------------------
+// MULTER FILE UPLOAD TEST
+// ----------------------------
+function uploadImage(){
+
+const fileInput =
+document.getElementById("imageFile");
+
+if(!fileInput.files.length){
+    alert("Please select an image first");
+    return;
+}
+
+const formData = new FormData();
+
+formData.append(
+    "image",
+    fileInput.files[0]
+);
+
+fetch("/api/upload",{
+    method:"POST",
+    body: formData
+})
+.then(res=>res.json())
+.then(data=>{
+
+    console.log(data);
+
+    alert("Upload successful!");
+
+})
+.catch(err => {
+
+    console.error(err);
+
+    alert("Upload failed");
+
+});
+
+}
+
+</script>
 
 </body>
 </html>

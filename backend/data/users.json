@@ -3,7 +3,7 @@
     "id": 1,
     "username": "piyush",
     "password": "1234",
-    "unlockedLevel": 4
+    "unlockedLevel": 3
   },
   {
     "id": 2,
@@ -21,6 +21,18 @@
     "id": 4,
     "username": "prabhnoor",
     "password": "1111",
+    "unlockedLevel": 1
+  },
+  {
+    "id": 1777281850372,
+    "username": "rahul",
+    "password": "6969",
+    "unlockedLevel": 1
+  },
+  {
+    "id": 1777284830342,
+    "username": "bigmom",
+    "password": "77777",
     "unlockedLevel": 1
   }
 ]
